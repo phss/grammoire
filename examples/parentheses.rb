@@ -1,9 +1,9 @@
 require "grammoire"
 
 grammar = Grammoire.define do
-  rule :s => apply(:s) + apply(:s)
-  rule :s => "(#{apply(:s)})"
-  rule :s => '()' 
+  rule(:s) { produce(:s) + produce(:s) }
+  rule(:s) { "(#{produce(:s)})" }
+  rule(:s) { '()' }
 end
 
-10.times { puts grammar.generate(:s) }
+10.times { puts grammar.produce(:s) }
