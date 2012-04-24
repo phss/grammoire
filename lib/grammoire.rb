@@ -1,0 +1,1 @@
+require 'grammoire/grammar'
