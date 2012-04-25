@@ -17,13 +17,19 @@ class Grammar
   def produce(rule_name)
     raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless rules_names.include?(rule_name)
 
-    rule_for(rule_name).select_production(@random_generator).evaluate(self)
+    rule = rule_for(rule_name)
+    
+    return one_of(rule.productions).evaluate(self)
   end
 
  private
 
   def rule_for(name)
     @rules[name]
+  end
+
+  def one_of(productions)
+    productions[@random_generator.next(productions.size)]
   end
 
 end

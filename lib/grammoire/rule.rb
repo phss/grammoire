@@ -1,4 +1,5 @@
 class Rule
+  attr_reader :productions
 
   def initialize
     @productions = []
@@ -8,8 +9,4 @@ class Rule
     @productions << production
   end
 
-  def select_production(random_generator)
-    @productions[random_generator.next(@productions.size)]
-  end
- 
 end
