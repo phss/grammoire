@@ -14,10 +14,16 @@ class Grammar
     @rules.keys
   end
 
-  def produce(rule)
-    raise GrammarError.new("Rule '#{rule}' doesn't exist in the grammar.") unless rules_names.include?(rule)
+  def produce(rule_name)
+    raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless rules_names.include?(rule_name)
 
-    @rules[rule].select_production(@random_generator).evaluate(self)
+    rule_for(rule_name).select_production(@random_generator).evaluate(self)
+  end
+
+ private
+
+  def rule_for(name)
+    @rules[name]
   end
 
 end
