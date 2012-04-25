@@ -5,9 +5,9 @@ class Grammar
     @random_generator = random_generator
   end
   
-  def rule(name, &evaluation)
+  def rule(name, &action)
     @rules[name] ||= []    
-    @rules[name] << evaluation
+    @rules[name] << Production.new(action)
   end
 
   def rules_names
@@ -18,9 +18,9 @@ class Grammar
     raise GrammarError.new("Rule '#{rule}' doesn't exist in the grammar.") unless rules_names.include?(rule)
 
     rules = @rules[rule]
-    selected_rule = rules[@random_generator.next(rules.size)]
+    production = rules[@random_generator.next(rules.size)]
 
-    instance_eval &selected_rule
+    instance_eval &production.action
   end
 
 end
