@@ -6,7 +6,7 @@ class Grammar
   end
   
   def rule(name, &action)
-    @rules[name] ||= []    
+    @rules[name] ||= Rule.new    
     @rules[name] << Production.new(action)
   end
 
@@ -17,10 +17,7 @@ class Grammar
   def produce(rule)
     raise GrammarError.new("Rule '#{rule}' doesn't exist in the grammar.") unless rules_names.include?(rule)
 
-    rules = @rules[rule]
-    production = rules[@random_generator.next(rules.size)]
-
-    instance_eval &production.action
+    instance_eval &@rules[rule].select_production(@random_generator).action
   end
 
 end
