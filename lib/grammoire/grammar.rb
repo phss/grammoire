@@ -17,7 +17,7 @@ class Grammar
   def produce(rule)
     raise GrammarError.new("Rule '#{rule}' doesn't exist in the grammar.") unless rules_names.include?(rule)
 
-    instance_eval &@rules[rule].select_production(@random_generator).action
+    @rules[rule].select_production(@random_generator).evaluate(self)
   end
 
 end
