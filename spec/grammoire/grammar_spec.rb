@@ -1,19 +1,5 @@
 require 'spec_helper'
 
-class StubRandomGenerator
-  def initialize(results)
-    @results = results
-  end
-
-  def self.should_produce(*results)
-    StubRandomGenerator.new(results)
-  end
-
-  def next(upto)
-    @results.shift
-  end
-end
-
 describe Grammar do
   let(:grammar) { Grammar.new }
   

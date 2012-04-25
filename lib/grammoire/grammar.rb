@@ -1,9 +1,3 @@
-class RandomGenerator
-  def next(upto)
-    rand(upto)
-  end
-end
-
 class Grammar
 
   def initialize(random_generator = RandomGenerator.new)
