@@ -1,5 +1,19 @@
 require 'spec_helper'
 
+class StubRandomGenerator
+  def initialize(results)
+    @results = results
+  end
+
+  def self.should_produce(*results)
+    StubRandomGenerator.new(results)
+  end
+
+  def next(upto)
+    @results.shift
+  end
+end
+
 describe Grammar do
   let(:grammar) { Grammar.new }
   
@@ -26,6 +40,18 @@ describe Grammar do
     grammar.rule(:terminal) { 'terminal' }
 
     grammar.produce(:non_terminal).should == 'non-terminal'
+  end
+
+  it 'should select one of the production rules' do
+    random_generator = StubRandomGenerator.should_produce(0, 1, 1)
+    grammar = Grammar.new(random_generator)
+
+    grammar.rule(:two_choices) { 'terminal x' }
+    grammar.rule(:two_choices) { 'terminal y' }
+
+    grammar.produce(:two_choices).should == 'terminal x'
+    grammar.produce(:two_choices).should == 'terminal y'
+    grammar.produce(:two_choices).should == 'terminal y'
   end
 
 end
