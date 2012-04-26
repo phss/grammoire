@@ -4,6 +4,7 @@ module Grammoire
     def initialize(random_generator = RandomGenerator.new)
       @rules = {}
       @random_generator = random_generator
+      @context = EvaluationContext.new(self)
     end
     
     def rule(name, &action)
@@ -20,7 +21,7 @@ module Grammoire
 
       rule = rule_for(rule_name)
       
-      return one_of(rule.productions).evaluate(self)
+      return one_of(rule.productions).evaluate(@context)
     end
 
    private

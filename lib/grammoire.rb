@@ -2,6 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/grammoire/util/random_genera
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/grammar')
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/production')
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/rule')
+require File.expand_path(File.dirname(__FILE__) + '/grammoire/evaluation_context')
 
 class GrammarError < StandardError; end
 
