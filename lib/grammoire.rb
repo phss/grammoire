@@ -5,7 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + '/grammoire/rule')
 
 class GrammarError < StandardError; end
 
-class Grammoire
+module Grammoire
   def self.define(&block)
     grammar = Grammar.new
     grammar.instance_eval &block

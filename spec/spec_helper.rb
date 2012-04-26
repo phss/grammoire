@@ -1,6 +1,7 @@
 require 'rspec'
 require 'mocha'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
+include Grammoire
 
 class StubRandomGenerator
   def initialize(results)
