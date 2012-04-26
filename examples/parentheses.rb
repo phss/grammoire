@@ -9,13 +9,26 @@ end
 
 10.times { puts grammar.produce(:s) + "\n\n" }
 
-# Rule with multiple options (doesn't work yet...it will blow up)
-grammar = Grammoire.define do
-  rule :s do
-    production { produce(:s) + produce(:s) }
-    production { "(#{produce(:s)})" }
-    production { '()' }
+# Rule with custom context to simplify rule definition
+class ArrayEvaluationContext < Grammoire::EventContext
+  def one_of(productions)
+    production = productions[rand(productions.size)] 
+    evaluated_results =  production.collect do |element|
+      if element.kind_of? Symbol
+        produce(element)
+      else
+        element
+      end
+    end
+    return evaluated_results.join
   end
+end
+
+
+grammar = Grammoire.define do
+  context ArrayEvaluationContext
+
+  rule(:s) { one_of([:s, :s], ['(', :s, ')'], ['()']) }
 end
 
 10.times { puts grammar.produce(:s) + "\n\n" }
