@@ -40,4 +40,17 @@ describe Grammar do
     grammar.produce(:two_choices).should == 'terminal y'
   end
 
+  it 'should define custom context for productions to be executed' do
+    class CustomContext < EvaluationContext
+      def custom_method
+        "hello there"
+      end
+    end
+
+    grammar.context(CustomContext)
+    grammar.rule(:custom) { custom_method }
+
+    grammar.produce(:custom).should == "hello there"
+  end
+
 end

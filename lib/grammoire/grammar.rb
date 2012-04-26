@@ -4,7 +4,11 @@ module Grammoire
     def initialize(random_generator = RandomGenerator.new)
       @rules = {}
       @random_generator = random_generator
-      @context = EvaluationContext.new(self)
+      context(EvaluationContext)
+    end
+
+    def context(context_class)
+      @context = context_class.new(self)
     end
     
     def rule(name, &action)

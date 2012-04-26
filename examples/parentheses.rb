@@ -11,7 +11,7 @@ end
 
 # Rule with custom context to simplify rule definition
 class ArrayEvaluationContext < Grammoire::EvaluationContext
-  def one_of(productions)
+  def one_of(*productions)
     production = productions[rand(productions.size)] 
     evaluated_results =  production.collect do |element|
       if element.kind_of? Symbol
