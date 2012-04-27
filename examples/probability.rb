@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 
 grammar = Grammoire.define do
-  rule(:s, :weight => 2) { 'a' + produce(:s) }
+  rule(:s, :weight => 4) { 'a' + produce(:s) }
   rule(:s) { 'b' + produce(:s) }
   rule(:s) { produce(:end) }
   
