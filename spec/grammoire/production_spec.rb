@@ -2,24 +2,29 @@ require 'spec_helper'
 
 describe Production do
 
-  it 'should evaluate action in the given context' do
-    context = mock()
-    context.expects(:inside_context).returns("context response")
+  describe "(construction)" do
+    it 'should define a weight for evaluating the production' do
+      production = Production.new(32)
 
-    production = Production.new(1) { inside_context }
+      production.weight.should == 32
+    end
 
-    production.evaluate(context).should == "context response"
+    it 'should construct production through an options map' do
+      production = Production.with_options(:weight => 4) { evaluation }
+
+      production.weight.should == 4
+    end
   end
 
-  it 'should define a weight for evaluating the production' do
-    production = Production.new(32)
+  describe "(evaluation)" do
+    it 'should evaluate action in the given context' do
+      context = mock()
+      context.expects(:inside_context).returns("context response")
 
-    production.weight.should == 32
+      production = Production.new(1) { inside_context }
+
+      production.evaluate(context).should == "context response"
+    end
   end
 
-  it 'should construct production through an options map' do
-    production = Production.from(:weight => 4) { evaluation }
-
-    production.weight.should == 4
-  end
 end

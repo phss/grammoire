@@ -13,7 +13,7 @@ module Grammoire
     
     def rule(name, &action)
       @rules[name] ||= Rule.new    
-      @rules[name] << Production.new(1, &action)
+      @rules[name] << Production.with_options({}, &action)
     end
 
     def rules_names
