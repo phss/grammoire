@@ -16,4 +16,10 @@ describe Production do
 
     production.weight.should == 32
   end
+
+  it 'should construct production through an options map' do
+    production = Production.from(:weight => 4) { evaluation }
+
+    production.weight.should == 4
+  end
 end
