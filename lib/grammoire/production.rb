@@ -1,7 +1,9 @@
 module Grammoire
   class Production
+    attr_reader :weight
     
-    def initialize(&action)
+    def initialize(weight, &action)
+      @weight = weight
       @action = action
     end 
 

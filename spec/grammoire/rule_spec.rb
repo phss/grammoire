@@ -4,9 +4,9 @@ describe Rule do
   let(:rule) { Rule.new }
 
   it 'should return list of productions' do
-    first_production = Production.new
-    second_production = Production.new
-    third_production = Production.new
+    first_production = Production.new(1)
+    second_production = Production.new(1)
+    third_production = Production.new(1)
 
     rule << first_production
     rule << second_production
