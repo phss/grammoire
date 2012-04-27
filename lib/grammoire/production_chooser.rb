@@ -7,11 +7,9 @@ class ProductionChooser
   def select_from(productions)
     return nil if productions.empty?
 
-    options = []
-    productions.each do |production|
+    options = productions.inject [] do |options, production|
       options << [production] * production.weight
-    end
-    options.flatten!
+    end.flatten
 
     return @random_generator.one_of(options)
   end
