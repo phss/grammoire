@@ -38,17 +38,27 @@ describe Grammar do
     
   end
 
-  it 'should define custom context for productions to be executed' do
-    class CustomContext < EvaluationContext
-      def custom_method
-        "hello there"
-      end
+  describe '(data points)' do
+    it 'should produce with data points' do
+      grammar.rule(:with_data) { data(:some_data) }
+
+      grammar.produce(:with_data, :some_data => 123).should == 123
     end
+  end
 
-    grammar.context(CustomContext)
-    grammar.rule(:custom) { custom_method }
+  describe '(context)' do
+    it 'should define custom context for productions to be executed' do
+      class CustomContext < EvaluationContext
+        def custom_method
+          "hello there"
+        end
+      end
 
-    grammar.produce(:custom).should == "hello there"
+      grammar.context(CustomContext)
+      grammar.rule(:custom) { custom_method }
+
+      grammar.produce(:custom).should == "hello there"
+    end
   end
 
 end

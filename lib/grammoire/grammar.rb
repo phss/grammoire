@@ -16,8 +16,10 @@ module Grammoire
       @rules[name] << Production.with_options(options, &action)
     end
 
-    def produce(rule_name)
-      raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless @rules.keys.include?(rule_name)
+    def produce(rule_name, data = {})
+      raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless @rules.has_key?(rule_name)
+
+      @context.with_data_points(data)
       
       return @chooser.select_from(production_rules_for(rule_name)).evaluate(@context)
     end
