@@ -9,8 +9,9 @@ class ProductionChooser
 
     options = []
     productions.each do |production|
-      production.weight.times { options << production }
+      options << [production] * production.weight
     end
+    options.flatten!
 
     return @random_generator.one_of(options)
   end
