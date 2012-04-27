@@ -3,7 +3,7 @@ module Grammoire
 
     def initialize(random_generator = RandomGenerator.new)
       @rules = {}
-      @random_generator = random_generator
+      @chooser = ProductionChooser.new(random_generator)
       context(EvaluationContext)
     end
 
@@ -23,25 +23,15 @@ module Grammoire
     def produce(rule_name)
       raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless rules_names.include?(rule_name)
 
-      rule = rule_for(rule_name)
       
-      return one_of(rule.productions).evaluate(@context)
+      return @chooser.select_from(production_rule_for(rule_name)).evaluate(@context)
     end
 
    private
 
-    def rule_for(name)
-      @rules[name]
+    def production_rule_for(name)
+      @rules[name].productions
     end
-
-    def one_of(productions)
-      options = []
-      productions.each do |production|
-        production.weight.times { options << production }
-      end
-
-      return options[@random_generator.next(options.size)]
-    end
-
+    
   end
 end

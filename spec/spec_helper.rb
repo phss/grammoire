@@ -4,12 +4,14 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 include Grammoire
 
 class StubRandomGenerator
-  def initialize(results)
+  
+  def returning_results(*results)
     @results = results
+    return self
   end
 
   def self.should_produce(*results)
-    StubRandomGenerator.new(results)
+    StubRandomGenerator.new.returning_results(*results)
   end
 
   def next(upto)
