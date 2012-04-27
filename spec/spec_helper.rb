@@ -3,7 +3,7 @@ require 'mocha'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 include Grammoire
 
-class StubRandomGenerator
+class StubRandomGenerator < RandomGenerator
   
   def returning_results(*results)
     @results = results
@@ -14,7 +14,7 @@ class StubRandomGenerator
     StubRandomGenerator.new.returning_results(*results)
   end
 
-  def next(upto)
+  def number_up_to(max)
     @results.shift
   end
 end

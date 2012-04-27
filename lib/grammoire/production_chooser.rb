@@ -12,7 +12,7 @@ class ProductionChooser
       production.weight.times { options << production }
     end
 
-    return options[@random_generator.next(options.size)]
+    return @random_generator.one_of(options)
   end
   
 end
