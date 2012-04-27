@@ -11,9 +11,9 @@ module Grammoire
       @context = context_class.new(self)
     end
     
-    def rule(name, &action)
+    def rule(name, options = {}, &action)
       @rules[name] ||= Rule.new    
-      @rules[name] << Production.with_options({}, &action)
+      @rules[name] << Production.with_options(options, &action)
     end
 
     def rules_names
@@ -35,7 +35,12 @@ module Grammoire
     end
 
     def one_of(productions)
-      productions[@random_generator.next(productions.size)]
+      options = []
+      productions.each do |production|
+        production.weight.times { options << production }
+      end
+
+      return options[@random_generator.next(options.size)]
     end
 
   end

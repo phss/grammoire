@@ -53,4 +53,17 @@ describe Grammar do
     grammar.produce(:custom).should == "hello there"
   end
 
+  it 'should select production based on the probability over the weightings' do
+    random_generator = StubRandomGenerator.should_produce(0, 1, 2, 3)
+    grammar = Grammar.new(random_generator)
+
+    grammar.rule(:with_weight, :weight => 3) { 'more probable' }
+    grammar.rule(:with_weight) { 'less probable' }
+
+    grammar.produce(:with_weight).should == 'more probable'
+    grammar.produce(:with_weight).should == 'more probable'
+    grammar.produce(:with_weight).should == 'more probable' 
+    grammar.produce(:with_weight).should == 'less probable' 
+  end
+
 end
