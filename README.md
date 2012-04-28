@@ -26,12 +26,45 @@ Installation
 Features
 --------
 
-Multiple rules for same symbol
+_Multiple rules for same symbol_
 
-Rule weights
+    grammar = Grammoire.define do
+      rule(:terminal) { produce { 'a' } }
+      rule(:terminal) { produce { 'b' } }
+    end
+    
+    grammar.evaluate(:terminal) # Equal chances of generating an 'a' or 'b'
 
-Rule pre conditions
+_Rule weights_
 
-Data points
+    grammar = Grammoire.define do
+      rule(:weighted) { weights 4; produce { 'a' } }
+      rule(:weighted) { weights 2; produce { 'b' } }
+    end
+    
+    grammar.evaluate(:weighted) # Twice more likely of generating 'a' rather then 'b'
 
-Custom contexts
+_Data points_
+
+    grammar = Grammoire.define do
+      rule(:full_name) { produce { eval(:first_name) + ' ' + eval(:last_name) } }
+      rule(:first_name) { produce { data(:first) } }
+      rule(:last_name) { produce { data(:last) } }
+    end
+    
+    grammar.evaluate(:full_name, :first => "Jonny", :last => "Data") # => Produces 'Jonny Data'
+
+_Rule pre-conditions_
+
+    grammar = Grammoire.define do
+      rule(:conditionals) do
+        pre_condition { data(:number) >= 5 }
+        produce { 'More then 5!' }
+      end
+      rule(:conditionals) do
+        pre_condition { data(:number) < 5 }
+        produce { 'Less then 5.' }
+      end      
+    end
+    
+    grammar.evaluate(:conditionals, :number => 7) # => Produces 'More then 5!'
