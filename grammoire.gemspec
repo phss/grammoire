@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "examples/features/data_points.rb",
     "examples/features/probability.rb",
     "examples/features/single_rule.rb",
+    "grammoire.gemspec",
     "lib/grammoire.rb",
     "lib/grammoire/evaluation_context.rb",
     "lib/grammoire/grammar.rb",
