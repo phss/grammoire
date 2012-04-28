@@ -2,8 +2,8 @@ module Grammoire
   class Grammar
 
     def initialize(random_generator = RandomGenerator.new)
-      @rules = {}
-      @chooser = ProductionChooser.new(random_generator)
+      @rules = []
+      @chooser = RuleChooser.new(random_generator)
       context(EvaluationContext)
     end
 
@@ -12,22 +12,23 @@ module Grammoire
     end
     
     def rule(name, options = {}, &action)
-      @rules[name] ||= Rule.new    
-      @rules[name] << Production.with_options(options, &action)
+      @rules << Rule.new(name, &action)
     end
 
-    def produce(rule_name, data = {})
-      raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") unless @rules.has_key?(rule_name)
+    def evaluate(rule_name, data = {})
+      rules = rules_for(rule_name)
+
+      raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") if rules.empty?
 
       @context.with_data_points(data)
       
-      return @chooser.select_from(production_rules_for(rule_name)).evaluate(@context)
+      return @chooser.select_from(rules).evaluate(@context)
     end
 
    private
-
-    def production_rules_for(name)
-      @rules[name].productions
+   
+    def rules_for(name)
+      @rules.select { |rule| rule.name == name }
     end
 
   end

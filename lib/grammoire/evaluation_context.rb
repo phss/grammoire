@@ -17,8 +17,8 @@ module Grammoire
       return @data[name]
     end
         
-    def produce(rule)
-      @grammar.produce(rule, @data)
+    def eval(rule)
+      @grammar.evaluate(rule, @data)
     end
 
   end

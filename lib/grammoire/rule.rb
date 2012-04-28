@@ -1,13 +1,24 @@
 module Grammoire
   class Rule
-    attr_reader :productions
+    attr_reader :name, :weight
 
-    def initialize
-      @productions = []
+    def initialize(name, &setup)
+      @name = name
+      weights(1)
+      
+      instance_eval &setup if block_given?
     end
-    
-    def <<(production)
-      @productions << production
+
+    def weights(weight)
+      @weight = weight
+    end
+   
+    def produce(&action)
+      @action = action
+    end
+
+    def evaluate(context)
+      context.instance_eval &@action
     end
 
   end

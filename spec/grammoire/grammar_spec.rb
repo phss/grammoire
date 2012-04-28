@@ -4,45 +4,44 @@ describe Grammar do
   let(:grammar) { Grammar.new }
   
   describe '(validation)' do
-    it 'should raise an exception when trying to produce output for non existent rule' do
-      lambda { grammar.produce(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist in the grammar.")
+    it 'should raise an exception when trying to evaluate output for non existent rule' do
+      lambda { grammar.evaluate(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist in the grammar.")
     end
   end
 
   describe '(producing)' do
+    it 'should evaluate terminal symbol of a rule' do
+      grammar.rule(:terminal) { produce { 'terminal' } }
 
-    it 'should produce terminal symbol of a rule' do
-      grammar.rule(:terminal) { 'terminal' }
-
-      grammar.produce(:terminal).should == 'terminal'
+      grammar.evaluate(:terminal).should == 'terminal'
     end
 
     it 'should evaluate and substitute symbols when producing a non-terminal rule' do
-      grammar.rule(:non_terminal) { 'non-' + produce(:terminal) }
-      grammar.rule(:terminal) { 'terminal' }
+      grammar.rule(:non_terminal) { produce { 'non-' + eval(:terminal) } }
+      grammar.rule(:terminal) { produce { 'terminal' } }
 
-      grammar.produce(:non_terminal).should == 'non-terminal'
+      grammar.evaluate(:non_terminal).should == 'non-terminal'
     end
 
     it 'should select one of the production rules' do
       random_generator = StubRandomGenerator.should_produce(0, 1, 1)
       grammar = Grammar.new(random_generator)
 
-      grammar.rule(:two_choices) { 'terminal x' }
-      grammar.rule(:two_choices) { 'terminal y' }
+      grammar.rule(:two_choices) { produce { 'terminal x' } }
+      grammar.rule(:two_choices) { produce { 'terminal y' } }
 
-      grammar.produce(:two_choices).should == 'terminal x'
-      grammar.produce(:two_choices).should == 'terminal y'
-      grammar.produce(:two_choices).should == 'terminal y'
+      grammar.evaluate(:two_choices).should == 'terminal x'
+      grammar.evaluate(:two_choices).should == 'terminal y'
+      grammar.evaluate(:two_choices).should == 'terminal y'
     end
     
   end
 
   describe '(data points)' do
-    it 'should produce with data points' do
-      grammar.rule(:with_data) { data(:some_data) }
+    it 'should evaluate with data points' do
+      grammar.rule(:with_data) { produce { data(:some_data) } }
 
-      grammar.produce(:with_data, :some_data => 123).should == 123
+      grammar.evaluate(:with_data, :some_data => 123).should == 123
     end
   end
 
@@ -55,9 +54,9 @@ describe Grammar do
       end
 
       grammar.context(CustomContext)
-      grammar.rule(:custom) { custom_method }
+      grammar.rule(:custom) { produce { custom_method } }
 
-      grammar.produce(:custom).should == "hello there"
+      grammar.evaluate(:custom).should == "hello there"
     end
   end
 

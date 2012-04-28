@@ -4,10 +4,10 @@ describe EvaluationContext do
   let(:grammar) { mock() }
   let(:context) { EvaluationContext.new(grammar) }
 
-  it 'should produce rule in context by evaluating from the grammar' do
-    grammar.expects(:produce).with(:some_rule, {}).returns("some result")
+  it 'should evaluate rule in context by evaluating from the grammar' do
+    grammar.expects(:evaluate).with(:some_rule, {}).returns("some result")
 
-    context.produce(:some_rule).should == "some result"
+    context.eval(:some_rule).should == "some result"
   end
 
   it 'should raise error when access inexistent data point' do
@@ -25,8 +25,8 @@ describe EvaluationContext do
     data = {:should => 'keep', :this => 'data'}
     context.with_data_points(data)
 
-    grammar.expects(:produce).with(:rule_with_data, data)
+    grammar.expects(:evaluate).with(:rule_with_data, data)
 
-    context.produce(:rule_with_data)
+    context.eval(:rule_with_data)
   end
 end
