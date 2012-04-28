@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 
 grammar = Grammoire.define do
-  rule(:full_name) { produce(:first_name) + ' ' + produce(:last_name) }
-  rule(:first_name) { data(:first) }
-  rule(:last_name) { data(:last) }
+  rule(:full_name) { produce { eval(:first_name) + ' ' + eval(:last_name) } }
+  rule(:first_name) { produce { data(:first) } }
+  rule(:last_name) { produce { data(:last) } }
 end
 
-puts grammar.produce(:full_name, :first => "Jonny", :last => "Data")
+puts grammar.evaluate(:full_name, :first => "Jonny", :last => "Data")

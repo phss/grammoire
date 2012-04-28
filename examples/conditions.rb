@@ -1,16 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 
 grammar = Grammoire.define do
-  rule(:conditionals, :condition => is { data(:variable) == 5 }) do
-    'You got 5!'
+  rule(:conditionals) do
+    pre_condition { data(:variable) == 5 }
+    produce {'You got 5!'}
   end
-  rule(:conditionals, :condition => is { data(:variable) < 5 }) do
-    'You got less then 5. :('
+  rule(:conditionals) do
+    pre_condition { data(:variable) < 5 }
+    produce {'You got less then 5. :('}
   end
-  rule(:conditionals, pre_condition { data(:variable) > 5 }) do
-    'You got more then 5. :)'
+  rule(:conditionals) do
+    pre_condition { data(:variable) > 5 }
+    produce {'You got more then 5. :)'}
   end
-  rule(:conditionals) { 'I am always valid.' }
+  rule(:conditionals) { produce {'I am always valid.'} }
 end
 
 puts grammar.produce(:conditionals, :variable => 5)
