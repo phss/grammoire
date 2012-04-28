@@ -18,17 +18,16 @@ module Grammoire
     def evaluate(rule_name, data = {})
       @context.with_data_points(data)
 
-      rules = rules_for(rule_name)
-
-      raise GrammarError.new("Rule '#{rule_name}' doesn't exist in the grammar.") if rules.empty?
-      
-      return @chooser.select_from(rules).evaluate(@context)
+      return @chooser.select_from(rules_for(rule_name)).evaluate(@context)
     end
 
    private
    
     def rules_for(name)
-      @rules.select { |rule| rule.name == name && rule.applies?(@context) }
+      rules = @rules.select { |rule| rule.name == name && rule.applies?(@context) }
+      raise GrammarError.new("Rule '#{name}' doesn't exist in the grammar or don't have valid pre-conditions.") if rules.empty?
+
+      return rules
     end
 
   end
