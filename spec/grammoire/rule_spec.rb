@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Rule do
+  let(:context) { mock() }
   let(:rule) { Rule.new(:rule_name) }
 
   it 'should construct rule with a setup block' do
@@ -26,9 +27,30 @@ describe Rule do
     end
   end
 
+  describe '(conditions)' do
+    it 'should always applies when pre conditions not specified' do
+      rule.applies?(context).should be_true
+    end
+
+    it 'should apply only if pre condition is valid within context' do
+      context.expects(:data).with(:number).returns(30)
+
+      rule.pre_condition { data(:number) == 30 }
+
+      rule.applies?(context).should be_true
+    end
+
+    it 'should not apply if pre condition is invalid within context' do
+      context.expects(:data).with(:number).returns(42)
+      
+      rule.pre_condition { data(:number) == 30 }
+
+      rule.applies?(context).should be_false
+    end
+  end
+
   describe '(evaluation)' do
     it 'should evaluate production in the given context' do
-      context = mock()
       context.expects(:inside_context).returns('context response')
 
       rule.produce { inside_context }

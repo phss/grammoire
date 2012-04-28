@@ -34,6 +34,14 @@ describe Grammar do
       grammar.evaluate(:two_choices).should == 'terminal y'
       grammar.evaluate(:two_choices).should == 'terminal y'
     end
+
+    it 'should evaluate rules that pass the pre condition check' do
+      grammar.rule(:condition) { pre_condition { false }; produce { 'not running' } }
+      grammar.rule(:condition) { pre_condition { true }; produce { 'I am true!' } }
+      grammar.rule(:condition) { pre_condition { false }; produce { 'I am false' }; weights 1000 }
+
+      grammar.evaluate(:condition).should == 'I am true!'  
+    end
     
   end
 

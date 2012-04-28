@@ -16,6 +16,6 @@ grammar = Grammoire.define do
   rule(:conditionals) { produce {'I am always valid.'} }
 end
 
-puts grammar.produce(:conditionals, :variable => 5)
-puts grammar.produce(:conditionals, :variable => 2)
-puts grammar.produce(:conditionals, :variable => 8)
+[5, 2, 8].each do |number|
+  puts "Variable #{number} gives #{grammar.evaluate(:conditionals, :variable => number)}"
+end

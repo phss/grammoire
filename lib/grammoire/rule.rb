@@ -5,12 +5,21 @@ module Grammoire
     def initialize(name, &setup)
       @name = name
       weights(1)
+      pre_condition { true }
       
       instance_eval &setup if block_given?
     end
 
     def weights(weight)
       @weight = weight
+    end
+
+    def pre_condition(&condition)
+      @condition = condition 
+    end
+
+    def applies?(context)
+      context.instance_eval &@condition
     end
    
     def produce(&action)
