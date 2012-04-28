@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
+require File.expand_path(File.dirname(__FILE__) + "/../../lib/grammoire")
 
 grammar = Grammoire.define do
   rule(:s) { produce { 'a' + eval(:s) }; weights 4 }
