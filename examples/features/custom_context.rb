@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
+require File.expand_path(File.dirname(__FILE__) + "/../../lib/grammoire")
 
 class ArrayEvaluationContext < Grammoire::EvaluationContext
   def one_of(*productions)
