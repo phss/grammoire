@@ -21,7 +21,7 @@ class Map
     description = "Map (#{width}, #{height})\n"  
     @grid.each do |rooms| 
       line = rooms.collect do |room|
-        if room.nil?
+        if room.nil? || room == :no_room
           " "
         else
           "#"
@@ -31,9 +31,6 @@ class Map
     end  
     return description
   end
-end
-
-class Room
 end
 
 map_grammar = Grammoire.define do
@@ -49,13 +46,8 @@ map_grammar = Grammoire.define do
     end
   end
 
-  rule(:room) do 
-    produce do 
-      Room.new
-    end
-  end
-
-  rule(:room) { produce { nil } }
+  rule(:room) { produce { :room } }
+  rule(:room) { produce { :no_room } }
 end
 
 
