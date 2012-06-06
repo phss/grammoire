@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/util/random_generator')
+require File.expand_path(File.dirname(__FILE__) + '/grammoire/grammar_builder')
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/grammar')
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/rule')
 require File.expand_path(File.dirname(__FILE__) + '/grammoire/rules')
@@ -9,8 +10,8 @@ class GrammarError < StandardError; end
 
 module Grammoire
   def self.define(&block)
-    grammar = Grammar.new
-    grammar.instance_eval &block
-    grammar
+    builder = GrammarBuilder.new
+    builder.instance_eval &block
+    builder.build
   end
 end
