@@ -24,12 +24,7 @@ module Grammoire
    private
    
     def rules_for(name)
-      rules = @rules.for(name)
-      rules = rules.select { |rule| rule.applies?(@context) }
-
-      raise GrammarError.new("Rule '#{name}' doesn't exist in the grammar or don't have valid pre-conditions.") if rules.empty?
-
-      return rules
+      @rules.applying_for(@context)
     end
 
   end

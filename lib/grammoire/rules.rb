@@ -9,10 +9,10 @@ module Grammoire
       @rules << rule
     end
 
-    def for(rule_name)
-      matching_rules = @rules.select { |rule| rule.name == rule_name }
+    def applying_for(context)
+      matching_rules = @rules.select { |rule| rule.applies?(context) }
 
-      raise GrammarError.new("Rule '#{rule_name}' doesn't exist.") if matching_rules.empty?
+      raise GrammarError.new("Rule '#{context.rule_name}' doesn't exist or don't have valid pre-conditions.") if matching_rules.empty?
 
       return matching_rules 
     end
