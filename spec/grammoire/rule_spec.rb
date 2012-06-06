@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe Rule do
   let(:context) { mock() }
+  let(:context_for_rule) { context.stubs(:rule_name).returns(rule.name); context }
+
   let(:rule) { Rule.new(:rule_name) }
 
-  it 'should construct rule with a setup block' do
+  it 'constructs rule with a setup block' do
     rule = Rule.new(:my_name) do
       weights 5
       produce { 'production' }
@@ -16,11 +18,11 @@ describe Rule do
   end
 
   describe '(weighting)' do
-    it 'should have default weight of 1' do
+    it 'has default weight of 1' do
       rule.weight.should == 1
     end
 
-    it 'should allow changing the weight' do
+    it 'allows changing the weight' do
       rule.weights(3)
 
       rule.weight.should == 3
@@ -28,34 +30,42 @@ describe Rule do
   end
 
   describe '(conditions)' do
-    it 'should always applies when pre conditions not specified' do
+    it 'always applies when rule name matches context rule and pre conditions not specified' do
+      context.expects(:rule_name).returns(rule.name)
+
       rule.applies?(context).should be_true
     end
 
-    it 'should apply only if pre condition is valid within context' do
-      context.expects(:data).with(:number).returns(30)
+    it 'applies if pre condition is valid within context' do
+      context_for_rule.expects(:data).with(:number).returns(30)
 
       rule.pre_condition { data(:number) == 30 }
 
-      rule.applies?(context).should be_true
+      rule.applies?(context_for_rule).should be_true
     end
 
-    it 'should not apply if pre condition is invalid within context' do
-      context.expects(:data).with(:number).returns(42)
+    it 'doesnt apply if context is for a different rule' do
+      context.expects(:rule_name).returns(:another_rule)
+
+      rule.applies?(context).should be_false
+    end
+
+    it 'doesnt apply if pre condition is invalid within context' do
+      context_for_rule.expects(:data).with(:number).returns(42)
       
       rule.pre_condition { data(:number) == 30 }
 
-      rule.applies?(context).should be_false
+      rule.applies?(context_for_rule).should be_false
     end
   end
 
   describe '(evaluation)' do
-    it 'should evaluate production in the given context' do
-      context.expects(:inside_context).returns('context response')
+    it 'evaluates production in the given context' do
+      context_for_rule.expects(:inside_context).returns('context response')
 
       rule.produce { inside_context }
 
-      rule.evaluate(context).should == 'context response'
+      rule.evaluate(context_for_rule).should == 'context response'
     end
   end
 

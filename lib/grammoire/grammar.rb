@@ -16,6 +16,7 @@ module Grammoire
     end
 
     def evaluate(rule_name, data = {})
+      @context.for_rule(rule_name)
       @context.with_data_points(data)
 
       return @chooser.select_from(rules_for(rule_name)).evaluate(@context)
@@ -26,7 +27,7 @@ module Grammoire
     def rules_for(name)
       rules = @rules.for(name)
       rules = rules.select { |rule| rule.applies?(@context) }
-      
+
       raise GrammarError.new("Rule '#{name}' doesn't exist in the grammar or don't have valid pre-conditions.") if rules.empty?
 
       return rules

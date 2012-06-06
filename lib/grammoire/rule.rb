@@ -19,6 +19,7 @@ module Grammoire
     end
 
     def applies?(context)
+      return false unless context.rule_name == @name
       context.instance_eval &@condition
     end
    

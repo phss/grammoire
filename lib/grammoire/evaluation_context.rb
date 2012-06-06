@@ -1,6 +1,7 @@
 module Grammoire
 
   class EvaluationContext
+    attr_reader :rule_name
 
     def initialize(grammar)
       @grammar = grammar
@@ -16,7 +17,11 @@ module Grammoire
 
       return @data[name]
     end
-        
+
+    def for_rule(rule_name)
+      @rule_name = rule_name
+    end
+
     def eval(rule)
       @grammar.evaluate(rule, @data)
     end

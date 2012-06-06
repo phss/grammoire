@@ -4,9 +4,9 @@ describe Rules do
   let(:rules) { Rules.new }
 
   it 'returns list of rules matching a name' do
-    matching_rule_1, matching_rule_2, another_rule = rule(:matching_rule), rule(:matching_rule), rule(:another_rule)
+    matching, another_matching, mistmatch = rule(:matching_rule), rule(:matching_rule), rule(:another_rule)
     
-    rules.for(:matching_rule).should =~ [matching_rule_1, matching_rule_2]
+    rules.for(:matching_rule).should =~ [matching, another_matching]
   end
 
   it 'raises an error when querying for inexistent rule' do
