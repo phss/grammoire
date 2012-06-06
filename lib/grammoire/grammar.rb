@@ -16,8 +16,7 @@ module Grammoire
     end
 
     def evaluate(rule_name, data = {})
-      @context.for_rule(rule_name)
-      @context.with_data_points(data)
+      @context.for_evaluation(rule_name, data)
 
       return @chooser.select_from(rules_for(rule_name)).evaluate(@context)
     end

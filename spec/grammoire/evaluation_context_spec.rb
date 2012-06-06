@@ -14,22 +14,17 @@ describe EvaluationContext do
     lambda { context.data(:dont_exist) }.should raise_error(GrammarError, "Data point 'dont_exist' doesn't exist in the evaluation context.")
   end
 
-  it 'access data point' do
-    context.with_data_points(:point_a => "abc", :point_b => 123)
+  it 'configures for rule evaluation' do
+    context.for_evaluation(:some_rule, :point_a => "abc", :point_b => 123)
 
+    context.rule_name.should == :some_rule
     context.data(:point_a).should == "abc"
     context.data(:point_b).should == 123
   end
 
-  it 'access rule name' do
-    context.for_rule(:some_rule)
-
-    context.rule_name.should == :some_rule
-  end
-
   it 'forward data point when producing rule' do
     data = {:should => 'keep', :this => 'data'}
-    context.with_data_points(data)
+    context.for_evaluation(:any_rule, data)
 
     grammar.expects(:evaluate).with(:rule_with_data, data)
 
