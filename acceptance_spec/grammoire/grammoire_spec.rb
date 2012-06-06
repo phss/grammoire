@@ -1,50 +1,44 @@
 require 'spec_helper'
 
 describe 'Grammoire acceptance specs' do
-  let(:grammar) { Grammar.new }
   
-  describe '(validation)' do
-    it 'should raise an exception when trying to evaluate output for non existent rule' do
-      lambda { grammar.evaluate(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist in the grammar or don't have valid pre-conditions.")
-    end
-
-    it 'should raise an exception when evaluating a rule without valid productions' do
-      grammar.rule(:invalid) { pre_condition { false }; produce { 'not valid' } }
-
-      lambda { grammar.evaluate(:invalid) }.should raise_error(GrammarError, "Rule 'invalid' doesn't exist in the grammar or don't have valid pre-conditions.")
-    end
-  end
-
   describe '(producing)' do
-    it 'should evaluate terminal symbol of a rule' do
-      grammar.rule(:terminal) { produce { 'terminal' } }
+    it 'evaluates terminal symbol of a rule' do
+      grammar = Grammoire.define do
+        rule(:terminal) { produce { 'terminal' } }
+      end
 
       grammar.evaluate(:terminal).should == 'terminal'
     end
 
-    it 'should evaluate and substitute symbols when producing a non-terminal rule' do
-      grammar.rule(:non_terminal) { produce { 'non-' + eval(:terminal) } }
-      grammar.rule(:terminal) { produce { 'terminal' } }
+    it 'evaluate and substitute symbols when producing a non-terminal rule' do
+      grammar = Grammoire.define do
+        rule(:non_terminal) { produce { 'non-' + eval(:terminal) } }
+        rule(:terminal) { produce { 'terminal' } }  
+      end
 
       grammar.evaluate(:non_terminal).should == 'non-terminal'
     end
 
-    it 'should select one of the production rules' do
+    it 'select between two valid production rules' do
+      # TODO: replace this with a mock?
       random_generator = StubRandomGenerator.should_produce(0, 1, 1)
-      grammar = Grammar.new(random_generator)
+      old_grammar = Grammar.new(random_generator)
 
-      grammar.rule(:two_choices) { produce { 'terminal x' } }
-      grammar.rule(:two_choices) { produce { 'terminal y' } }
+      old_grammar.rule(:two_choices) { produce { 'terminal x' } }
+      old_grammar.rule(:two_choices) { produce { 'terminal y' } }
 
-      grammar.evaluate(:two_choices).should == 'terminal x'
-      grammar.evaluate(:two_choices).should == 'terminal y'
-      grammar.evaluate(:two_choices).should == 'terminal y'
+      old_grammar.evaluate(:two_choices).should == 'terminal x'
+      old_grammar.evaluate(:two_choices).should == 'terminal y'
+      old_grammar.evaluate(:two_choices).should == 'terminal y'
     end
 
-    it 'should evaluate rules that pass the pre condition check' do
-      grammar.rule(:condition) { pre_condition { false }; produce { 'not running' } }
-      grammar.rule(:condition) { pre_condition { true }; produce { 'I am true!' } }
-      grammar.rule(:condition) { pre_condition { false }; produce { 'I am false' }; weights 1000 }
+    it 'evaluate rules that pass the pre condition check' do
+      grammar = Grammoire.define do
+        rule(:condition) { pre_condition { false }; produce { 'not running' } }
+        rule(:condition) { pre_condition { true }; produce { 'I am true!' } }
+        rule(:condition) { pre_condition { false }; produce { 'I am false' }; weights 1000 }  
+      end
 
       grammar.evaluate(:condition).should == 'I am true!'  
     end
@@ -53,7 +47,9 @@ describe 'Grammoire acceptance specs' do
 
   describe '(data points)' do
     it 'should evaluate with data points' do
-      grammar.rule(:with_data) { produce { data(:some_data) } }
+      grammar = Grammoire.define do
+        rule(:with_data) { produce { data(:some_data) } }
+      end
 
       grammar.evaluate(:with_data, :some_data => 123).should == 123
     end
@@ -67,10 +63,27 @@ describe 'Grammoire acceptance specs' do
         end
       end
 
-      grammar.context(CustomContext)
-      grammar.rule(:custom) { produce { custom_method } }
+      grammar = Grammoire.define do
+        context CustomContext
+        rule(:custom) { produce { custom_method } }  
+      end
 
       grammar.evaluate(:custom).should == "hello there"
+    end
+  end
+
+  describe '(validation)' do
+    it 'should raise an exception when trying to evaluate output for non existent rule' do
+      grammar = Grammoire.define { }
+      lambda { grammar.evaluate(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist in the grammar or don't have valid pre-conditions.")
+    end
+
+    it 'should raise an exception when evaluating a rule without valid productions' do
+      grammar = Grammoire.define do
+        rule(:invalid) { pre_condition { false }; produce { 'not valid' } }
+      end
+
+      lambda { grammar.evaluate(:invalid) }.should raise_error(GrammarError, "Rule 'invalid' doesn't exist in the grammar or don't have valid pre-conditions.")
     end
   end
 
