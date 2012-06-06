@@ -26,3 +26,12 @@ desc 'Run specs'
 RSpec::Core::RakeTask.new do |t|
   t.rspec_opts = %w{--format s --color}
 end
+
+desc 'Run acceptance specs'
+RSpec::Core::RakeTask.new do |t|
+  t.name = :acceptance
+  t.rspec_opts = %w{--format s --color}
+  t.pattern = "acceptance_spec/**/*_spec.rb"
+end
+
+task :all_tests => [:acceptance, :spec]
