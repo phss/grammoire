@@ -34,7 +34,7 @@ class Map
 end
 
 map_grammar = Grammoire.define do
-  rule(:map) do 
+  rule(:completely_random_map) do 
     produce do
       map = Map.new(data(:width), data(:height))
       data(:width).times do |x|
@@ -46,8 +46,16 @@ map_grammar = Grammoire.define do
     end
   end
 
+  rule(:map) do
+    produce do
+      store(:map, Map.new(data(:width), data(:height)))
+      eval(:room, :x => 10, :y => 10)
+      data(:map)
+    end
+  end
+
   rule(:room) { produce { :room } }
-  rule(:room) { produce { :no_room } }
+  rule(:room) { produce { data(:map).room_at(data(:x), data(:y), :no_room) } }
 end
 
 
