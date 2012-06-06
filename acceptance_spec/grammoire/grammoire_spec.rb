@@ -75,7 +75,7 @@ describe 'Grammoire acceptance specs' do
   describe '(validation)' do
     it 'should raise an exception when trying to evaluate output for non existent rule' do
       grammar = Grammoire.define { }
-      lambda { grammar.evaluate(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist in the grammar or don't have valid pre-conditions.")
+      lambda { grammar.evaluate(:no_such_rule) }.should raise_error(GrammarError, "Rule 'no_such_rule' doesn't exist.")
     end
 
     it 'should raise an exception when evaluating a rule without valid productions' do
