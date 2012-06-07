@@ -3,6 +3,10 @@ require 'mocha'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/grammoire")
 include Grammoire
 
+RSpec.configure do |config|
+  config.mock_framework = :mocha
+end
+
 class StubRandomGenerator < RandomGenerator
   
   def returning_results(*results)
