@@ -23,10 +23,11 @@ describe 'Grammoire acceptance specs' do
     it 'select between two valid production rules' do
       # TODO: replace this with a mock?
       random_generator = StubRandomGenerator.should_produce(0, 1, 1)
-      old_grammar = Grammar.new(random_generator)
+      rules = Rules.new
+      rules << Rule.new(:two_choices) { produce { 'terminal x' } }
+      rules << Rule.new(:two_choices) { produce { 'terminal y' } }
 
-      old_grammar.rule(:two_choices) { produce { 'terminal x' } }
-      old_grammar.rule(:two_choices) { produce { 'terminal y' } }
+      old_grammar = Grammar.new(rules, random_generator)
 
       old_grammar.evaluate(:two_choices).should == 'terminal x'
       old_grammar.evaluate(:two_choices).should == 'terminal y'

@@ -1,18 +1,14 @@
 module Grammoire
   class Grammar
 
-    def initialize(random_generator = RandomGenerator.new)
-      @rules = Rules.new
+    def initialize(rules, random_generator = RandomGenerator.new)
+      @rules = rules
       @chooser = RuleChooser.new(random_generator)
       context(EvaluationContext)
     end
 
     def context(context_class)
       @context = context_class.new(self)
-    end
-    
-    def rule(name, &action)
-      @rules << Rule.new(name, &action)
     end
 
     def evaluate(rule_name, data = {})
