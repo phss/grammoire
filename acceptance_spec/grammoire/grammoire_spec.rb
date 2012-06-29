@@ -27,7 +27,7 @@ describe 'Grammoire acceptance specs' do
       rules << Rule.new(:two_choices) { produce { 'terminal x' } }
       rules << Rule.new(:two_choices) { produce { 'terminal y' } }
 
-      old_grammar = Grammar.new(rules, random_generator)
+      old_grammar = Grammar.new(rules, EvaluationContext, random_generator)
 
       old_grammar.evaluate(:two_choices).should == 'terminal x'
       old_grammar.evaluate(:two_choices).should == 'terminal y'

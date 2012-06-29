@@ -9,10 +9,19 @@ describe GrammarBuilder do
     rules
   end
 
-  it 'builds a grammar with a set or rules' do
-    Grammar.expects(:new).with(rules).returns(grammar)
+  it 'builds a grammar with a set or rules and default context class' do
+    Grammar.expects(:new).with(rules, EvaluationContext).returns(grammar)
     
     builder.build.should == grammar
+  end
+
+  it 'allows overrding grammar evaluation context' do
+    another_evaluation_context = mock() 
+
+    Grammar.expects(:new).with(rules, another_evaluation_context)
+
+    builder.context(another_evaluation_context)
+    builder.build
   end
 
   it 'constructs and insert a rule' do
