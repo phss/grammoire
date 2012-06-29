@@ -1,12 +1,12 @@
 module Grammoire
   class Grammar
 
-    def initialize(rules, context_class, random_generator = RandomGenerator.new)
+    def initialize(rules, context_class, chooser)
       @rules = rules
-      @chooser = RuleChooser.new(random_generator)
       @context = context_class.new(self)
+      @chooser = chooser
     end
-    
+
     def evaluate(rule_name, data = {})
       @context.for_evaluation(rule_name, data)
 

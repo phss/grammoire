@@ -16,7 +16,7 @@ module Grammoire
     end
 
     def build
-      Grammar.new(@rules, @context_class)
+      Grammar.new(@rules, @context_class, RuleChooser.new(RandomGenerator.new))
     end
 
   end
