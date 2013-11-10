@@ -1,7 +1,7 @@
 Grammoire
 =========
 
-A context-sensitive grammar library for producing randomised objects.
+A context-sensitive grammar library for producing randomised objects. Despite being incomplete and dead, it was a fun project idea to explore. Proceed at your own peril.
 
 A more usual use of a grammar is to parse strings into objects and other programming language constructs, to be 
 interpreted. Instead of this, Grammoire allows you to define a grammar for producing objects in randomised ways. 
